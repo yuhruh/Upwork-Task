@@ -580,14 +580,14 @@ function renderPagination() {
 
     // Prev Button
     pages.push(`
-        <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition-all shadow-sm" aria-label="Previous page">
+        <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="flex h-9 w-9 items-center justify-centertext-slate-500 hover:scale-110 transition-all" aria-label="Previous page">
             <i class="fa-solid fa-angle-left text-xs"></i>
         </button>
     `);
 
     // First page marker
     if (startPage > 1) {
-        pages.push(`<button onclick="goToPage(1)" class="h-9 w-9 rounded-lg text-sm font-semibold text-slate-700 hover:bg-primary-600 hover:text-slate-50 hover:scale-110 transition-all shadow-sm">1</button>`);
+        pages.push(`<button onclick="goToPage(1)" class="h-9 w-9 text-sm font-semibold text-slate-700 hover:scale-110 hover:underline transition-all shadow-sm">1</button>`);
         if (startPage > 2) {
             pages.push(`<span class="px-2 text-slate-400 font-bold">...</span>`);
         }
@@ -597,11 +597,11 @@ function renderPagination() {
     for (let i = startPage; i <= endPage; i++) {
         const isActive = i === currentPage;
         const btnClass = isActive 
-            ? 'bg-primary-600 border-primary-600 text-white shadow-md' 
-            : 'border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm';
+            ? 'text-slate-900 underline'
+            : 'text-slate-600 hover:scale-110 transition-all';
         
         pages.push(`
-            <button onclick="goToPage(${i})" class="h-9 w-9 rounded-lg text-sm font-bold ${btnClass} transition-all">
+            <button onclick="goToPage(${i})" class="h-9 w-9 text-sm font-bold ${btnClass} transition-all">
                 ${i}
             </button>
         `);
@@ -612,12 +612,12 @@ function renderPagination() {
         if (endPage < totalPages - 1) {
             pages.push(`<span class="px-2 text-slate-400 font-bold">...</span>`);
         }
-        pages.push(`<button onclick="goToPage(${totalPages})" class="h-9 w-9 rounded-lg text-sm font-semibold text-slate-700 hover:bg-primary-600 hover:text-slate-50 hover:scale-110 transition-all shadow-sm">${totalPages}</button>`);
+        pages.push(`<button onclick="goToPage(${totalPages})" class="h-9 w-9 text-sm font-semibold text-slate-700 hover:scale-110 transition-all">${totalPages}</button>`);
     }
 
     // Next Button
     pages.push(`
-        <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition-all shadow-sm" aria-label="Next page">
+        <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="flex h-9 w-9 items-center justify-center text-slate-500 hover:scale-110 transition-all" aria-label="Next page">
             <i class="fa-solid fa-angle-right text-xs"></i>
         </button>
     `);
