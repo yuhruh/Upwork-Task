@@ -487,7 +487,7 @@ function renderProductsGrid() {
                     <!-- Aspect ratio card image box -->
                     <div class="w-full aspect-[4/3] bg-slate-50 rounded-xl flex items-center justify-center p-4 relative overflow-hidden mb-4">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-                        <img src="${product.image && product.image !== 'null' ? product.image : 'https://picsum.photos/seed/stellarcart/360/480'}" alt="${product.title}" loading="lazy" class="max-h-full max-w-full object-contain rounded-lg drop-shadow-sm group-hover:scale-105 duration-300">
+                        <img src="${getProductImage(product)}" alt="${product.title}" loading="lazy" class="max-h-full max-w-full object-contain rounded-lg drop-shadow-sm group-hover:scale-105 duration-300">
                         
                         <!-- Hover Quick View overlays -->
                         <div class="absolute inset-0 bg-slate-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -580,14 +580,14 @@ function renderPagination() {
 
     // Prev Button
     pages.push(`
-        <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition-all shadow-sm" aria-label="Previous page">
+        <button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition-all shadow-sm" aria-label="Previous page">
             <i class="fa-solid fa-angle-left text-xs"></i>
         </button>
     `);
 
     // First page marker
     if (startPage > 1) {
-        pages.push(`<button onclick="goToPage(1)" class="h-9 w-9 rounded-lg border border-slate-200 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all shadow-sm">1</button>`);
+        pages.push(`<button onclick="goToPage(1)" class="h-9 w-9 rounded-lg text-sm font-semibold text-slate-700 hover:bg-primary-600 hover:text-slate-50 hover:scale-110 transition-all shadow-sm">1</button>`);
         if (startPage > 2) {
             pages.push(`<span class="px-2 text-slate-400 font-bold">...</span>`);
         }
@@ -598,10 +598,10 @@ function renderPagination() {
         const isActive = i === currentPage;
         const btnClass = isActive 
             ? 'bg-primary-600 border-primary-600 text-white shadow-md' 
-            : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50 shadow-sm';
+            : 'border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm';
         
         pages.push(`
-            <button onclick="goToPage(${i})" class="h-9 w-9 rounded-lg border text-sm font-bold ${btnClass} transition-all">
+            <button onclick="goToPage(${i})" class="h-9 w-9 rounded-lg text-sm font-bold ${btnClass} transition-all">
                 ${i}
             </button>
         `);
@@ -612,12 +612,12 @@ function renderPagination() {
         if (endPage < totalPages - 1) {
             pages.push(`<span class="px-2 text-slate-400 font-bold">...</span>`);
         }
-        pages.push(`<button onclick="goToPage(${totalPages})" class="h-9 w-9 rounded-lg border border-slate-200 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all shadow-sm">${totalPages}</button>`);
+        pages.push(`<button onclick="goToPage(${totalPages})" class="h-9 w-9 rounded-lg text-sm font-semibold text-slate-700 hover:bg-primary-600 hover:text-slate-50 hover:scale-110 transition-all shadow-sm">${totalPages}</button>`);
     }
 
     // Next Button
     pages.push(`
-        <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition-all shadow-sm" aria-label="Next page">
+        <button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition-all shadow-sm" aria-label="Next page">
             <i class="fa-solid fa-angle-right text-xs"></i>
         </button>
     `);
@@ -686,7 +686,7 @@ function openQuickView(id) {
     const product = allProducts.find(p => p.id === id);
     if (!product) return;
 
-    document.getElementById('modal-image').src = product.image && product.image !== 'null' ? product.image : 'https://picsum.photos/seed/stellarcart/360/480';
+    document.getElementById('modal-image').src = getProductImage(product);
     document.getElementById('modal-image').alt = product.title;
     document.getElementById('modal-category').textContent = product.category;
     document.getElementById('modal-title').textContent = product.title;
@@ -906,6 +906,23 @@ function renderStarsHTML(rating) {
         starsHTML += '<i class="fa-regular fa-star opacity-40"></i>';
     }
     return starsHTML;
+}
+
+function getProductImage(product) {
+    if (!product || !product.image || product.image === 'null') {
+        return 'https://picsum.photos/seed/stellarcart/500/320';
+    }
+    
+    let imgUrl = product.image;
+    if (imgUrl.includes('cdn.catalog.example')) {
+        imgUrl = `https://picsum.photos/seed/cat${product.id}/500/320`;
+    }
+    
+    if (imgUrl.includes('picsum.photos')) {
+        imgUrl = imgUrl.replace(/\/\d+\/\d+$/, '/500/320');
+    }
+    
+    return imgUrl;
 }
 
 function formatNumber(num) {

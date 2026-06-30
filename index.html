@@ -89,17 +89,17 @@
     </nav>
 
     <!-- HERO SECTION -->
-    <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden shadow-md">
+    <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white py-20 px-4 sm:px-6 lg:px-8 relative overflow-auto shadow-md">
         <!-- Abstract glowing circles -->
         <div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-primary-600/20 blur-3xl pointer-events-none"></div>
         <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none"></div>
         
-        <div class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div class="max-w-7xl mx-auto relative z-10 flex flex-col md:justify-between md:flex-row">
             <div class="max-w-2xl">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-500/20 border border-primary-400/30 text-primary-300 mb-4 uppercase tracking-wider">
                     <span class="h-2 w-2 rounded-full bg-green-400 animate-pulse"></span> Instant Engine Loaded
                 </span>
-                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-3">
+                <h1 class="text-2xl sm:text-xl font-extrabold tracking-tight text-white mb-3">
                     Instant Product Search & Browse
                 </h1>
                 <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
@@ -108,7 +108,7 @@
             </div>
             
             <!-- STATS CARD -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl flex gap-6 divide-x divide-white/10 self-start md:self-auto">
+            <div class="bg-white/10 p-6 backdrop-blur-md border border-white/10 rounded-2xl shadow-xl flex items-center md:self-auto">
                 <div>
                     <div class="text-3xl font-black text-white" id="stat-products">4,000</div>
                     <div class="text-xs text-slate-300 uppercase font-semibold tracking-wider mt-1">Catalog Size</div>
@@ -240,7 +240,7 @@
                     
                     <!-- SORT DROPDOWN -->
                     <div class="sm:w-56">
-                        <div class="relative h-full">
+                        <div class="relative group">
                             <select id="sort-select" class="w-full h-full bg-slate-50 border border-slate-200 rounded-xl py-3.5 pl-4 pr-10 appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-semibold text-slate-700 cursor-pointer shadow-sm text-sm">
                                 <option value="featured">Featured / Default</option>
                                 <option value="price-asc">Price: Low to High</option>
@@ -249,7 +249,7 @@
                                 <option value="reviews-desc">Most Reviewed</option>
                                 <option value="released-desc">Newest Arrivals</option>
                             </select>
-                            <i class="fa-solid fa-angle-down absolute right-4 top-4.5 text-slate-400 pointer-events-none"></i>
+                            <i class="fa-solid fa-angle-down absolute right-4 top-1/2 translate-y-1/2 text-slate-400 pointer-events-none"></i>
                         </div>
                     </div>
                 </div>

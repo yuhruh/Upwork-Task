@@ -60,7 +60,7 @@ function renderDetailsPage() {
     document.title = `${currentProduct.title} - StellarCart`;
 
     // Populate product specifics
-    document.getElementById('p-image').src = currentProduct.image && currentProduct.image !== 'null' ? currentProduct.image : 'https://picsum.photos/seed/stellarcart/360/480';
+    document.getElementById('p-image').src = getProductImage(currentProduct);
     document.getElementById('p-image').alt = currentProduct.title;
     
     document.getElementById('p-breadcrumbs-category').textContent = currentProduct.category;
@@ -139,7 +139,7 @@ function renderRelatedProducts() {
                 <div>
                     <!-- Related Card Image -->
                     <div class="w-full aspect-square bg-slate-50 rounded-xl flex items-center justify-center p-4 relative overflow-hidden mb-3">
-                        <img src="${product.image && product.image !== 'null' ? product.image : 'https://picsum.photos/seed/stellarcart/360/480'}" alt="${product.title}" loading="lazy" class="max-h-full max-w-full object-contain rounded-lg drop-shadow-sm group-hover:scale-105 duration-300">
+                        <img src="${getProductImage(product)}" alt="${product.title}" loading="lazy" class="max-h-full max-w-full object-contain rounded-lg drop-shadow-sm group-hover:scale-105 duration-300">
                         
                         <div class="absolute inset-0 bg-slate-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                             <a href="product.html?id=${product.id}" class="bg-white/95 backdrop-blur text-slate-900 font-bold text-xs px-3.5 py-2 rounded-xl shadow-md flex items-center gap-1.5 transition-all hover:scale-105">
@@ -249,6 +249,23 @@ function copyProductLink() {
 // FORMATTERS
 function formatCurrency(val) {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+}
+
+function getProductImage(product) {
+    if (!product || !product.image || product.image === 'null') {
+        return 'https://picsum.photos/seed/stellarcart/500/320';
+    }
+    
+    let imgUrl = product.image;
+    if (imgUrl.includes('cdn.catalog.example')) {
+        imgUrl = `https://picsum.photos/seed/cat${product.id}/500/320`;
+    }
+    
+    if (imgUrl.includes('picsum.photos')) {
+        imgUrl = imgUrl.replace(/\/\d+\/\d+$/, '/500/320');
+    }
+    
+    return imgUrl;
 }
 
 function formatNumber(num) {
