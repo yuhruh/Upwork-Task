@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StellarCart - Modern Product Discovery</title>
+    <!-- Compiled Local Tailwind CSS Stylesheet -->
+    <link rel="stylesheet" href="dist/output.css">
+    <!-- FontAwesome for beautiful modern icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom styling for scrollbar and range input -->
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+        /* Range input premium look */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            border: 2px solid #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            transition: all 0.15s ease-in-out;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            background: #4338ca;
+        }
+    </style>
+</head>
+<body class="h-full text-slate-800 flex flex-col antialiased">
+
+    <!-- TOP NAVIGATION BAR -->
+    <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-xl bg-gradient-to-tr from-primary-600 to-indigo-500 text-white shadow-md">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold bg-gradient-to-r from-primary-600 to-indigo-500 bg-clip-text text-transparent">StellarCart</span>
+                        <span class="hidden sm:inline-block text-xs text-slate-400 block -mt-1 font-semibold tracking-wider uppercase">Founding Edition</span>
+                    </div>
+                </div>
+                
+                <!-- TOP META STATS -->
+                <div class="hidden md:flex items-center gap-6 text-sm text-slate-500">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-box text-primary-500"></i>
+                        <span><strong id="total-count-badge">0</strong> Products</span>
+                    </div>
+                    <div class="h-4 w-px bg-slate-200"></div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-tags text-teal-500"></i>
+                        <span><strong id="category-count-badge">0</strong> Categories</span>
+                    </div>
+                    <div class="h-4 w-px bg-slate-200"></div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-building text-amber-500"></i>
+                        <span><strong id="brand-count-badge">0</strong> Brands</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <!-- Favorites Indicator -->
+                    <button id="favorites-btn" class="relative p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors" title="Favorites">
+                        <i class="fa-solid fa-heart text-xl"></i>
+                        <span id="favorites-count" class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white scale-0 transition-transform">0</span>
+                    </button>
+                    <!-- Quick Cart Demo -->
+                    <button class="relative p-2 text-slate-400 hover:text-primary-600 hover:bg-slate-50 rounded-lg transition-colors" onclick="showToast('Feature coming soon in Next Edition!')">
+                        <i class="fa-solid fa-bag-shopping text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden shadow-md">
+        <!-- Abstract glowing circles -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-primary-600/20 blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div class="max-w-2xl">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary-500/20 border border-primary-400/30 text-primary-300 mb-4 uppercase tracking-wider">
+                    <span class="h-2 w-2 rounded-full bg-green-400 animate-pulse"></span> Instant Engine Loaded
+                </span>
+                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-3">
+                    Instant Product Search & Browse
+                </h1>
+                <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+                    Explore our curated collection of 4,000 premium products. Type keywords to reduce the scope dynamically as you add more search terms.
+                </p>
+            </div>
+            
+            <!-- STATS CARD -->
+            <div class="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-xl flex gap-6 divide-x divide-white/10 self-start md:self-auto">
+                <div>
+                    <div class="text-3xl font-black text-white" id="stat-products">4,000</div>
+                    <div class="text-xs text-slate-300 uppercase font-semibold tracking-wider mt-1">Catalog Size</div>
+                </div>
+                <div class="pl-6">
+                    <div class="text-3xl font-black text-emerald-400" id="stat-instock">3,800+</div>
+                    <div class="text-xs text-slate-300 uppercase font-semibold tracking-wider mt-1">Ready to Ship</div>
+                </div>
+                <div class="pl-6">
+                    <div class="text-3xl font-black text-amber-400" id="stat-avg-rating">4.2★</div>
+                    <div class="text-xs text-slate-300 uppercase font-semibold tracking-wider mt-1">Avg Rating</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN APP WRAPPER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+        
+        <!-- SIDEBAR FILTERS (Sticky on Desktop, Accordion/Slide-out on Mobile) -->
+        <aside class="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6">
+            
+            <!-- MOBILE FILTER TOGGLE BUTTON -->
+            <button id="mobile-filter-toggle" class="lg:hidden w-full flex items-center justify-center gap-2 bg-slate-800 text-white font-medium py-3 px-4 rounded-xl shadow transition-colors hover:bg-slate-700">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Filters & Options</span>
+                <i class="fa-solid fa-chevron-down ml-1 transition-transform" id="mobile-filter-chevron"></i>
+            </button>
+
+            <!-- CONTAINER FOR FILTERS -->
+            <div id="filter-panel" class="hidden lg:flex flex-col gap-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-soft transition-all duration-300">
+                
+                <!-- HEADER & CLEAR ALL -->
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-primary-500"></i> Refine Products
+                    </h2>
+                    <button id="reset-filters" class="text-xs font-semibold text-primary-600 hover:text-primary-800 hover:underline flex items-center gap-1 transition-colors">
+                        <i class="fa-solid fa-arrow-rotate-left text-[10px]"></i> Clear
+                    </button>
+                </div>
+
+                <!-- STOCK TOGGLE -->
+                <div>
+                    <label class="flex items-center cursor-pointer group">
+                        <div class="relative">
+                            <input type="checkbox" id="stock-only" class="sr-only">
+                            <div class="block bg-slate-200 w-10 h-6 rounded-full transition-colors group-hover:bg-slate-300" id="stock-toggle-bg"></div>
+                            <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform shadow-md" id="stock-toggle-dot"></div>
+                        </div>
+                        <span class="ml-3 text-sm font-semibold text-slate-700 group-hover:text-slate-900 transition-colors">In Stock Only</span>
+                    </label>
+                </div>
+
+                <!-- CATEGORY FILTER -->
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex justify-between items-center cursor-pointer" onclick="toggleFilterCollapse('category-filter-list', 'category-chevron')">
+                        <span>Category</span>
+                        <i class="fa-solid fa-chevron-up text-[10px] transition-transform" id="category-chevron"></i>
+                    </h3>
+                    <div id="category-filter-list" class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-1 transition-all duration-300">
+                        <!-- Categories dynamically loaded -->
+                        <div class="animate-pulse flex space-x-2 py-1"><div class="h-4 bg-slate-200 rounded w-full"></div></div>
+                    </div>
+                </div>
+
+                <!-- BRAND FILTER (With mini-search bar for brand search!) -->
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex justify-between items-center cursor-pointer" onclick="toggleFilterCollapse('brand-container', 'brand-chevron')">
+                        <span>Brand</span>
+                        <i class="fa-solid fa-chevron-up text-[10px] transition-transform" id="brand-chevron"></i>
+                    </h3>
+                    <div id="brand-container" class="space-y-3 transition-all duration-300">
+                        <!-- Mini search for brand -->
+                        <div class="relative">
+                            <input type="text" id="brand-search" placeholder="Search brands..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+                            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-[10px]"></i>
+                        </div>
+                        <div id="brand-filter-list" class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-1">
+                            <!-- Brands dynamically loaded -->
+                            <div class="animate-pulse flex space-x-2 py-1"><div class="h-4 bg-slate-200 rounded w-full"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRICE RANGE SLIDER -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Max Price</h3>
+                        <span id="price-slider-val" class="text-xs font-bold bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full">$2,000</span>
+                    </div>
+                    <input type="range" id="price-range" min="0" max="2500" value="2500" step="10" class="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-[10px] text-slate-400 font-semibold mt-1">
+                        <span id="price-min-label">$0</span>
+                        <span id="price-max-label">$2,500</span>
+                    </div>
+                </div>
+
+                <!-- RATING FILTER -->
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Minimum Rating</h3>
+                    <div class="grid grid-cols-5 gap-1">
+                        <button class="rating-filter-btn py-1 px-1 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:border-primary-400 hover:text-primary-600 transition-colors" data-rating="0">Any</button>
+                        <button class="rating-filter-btn py-1 px-1 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:border-primary-400 hover:text-primary-600 transition-colors flex items-center justify-center gap-0.5" data-rating="3">3★</button>
+                        <button class="rating-filter-btn py-1 px-1 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:border-primary-400 hover:text-primary-600 transition-colors flex items-center justify-center gap-0.5" data-rating="4">4★</button>
+                        <button class="rating-filter-btn py-1 px-1 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:border-primary-400 hover:text-primary-600 transition-colors flex items-center justify-center gap-0.5" data-rating="4.5">4.5★</button>
+                        <button class="rating-filter-btn py-1 px-1 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:border-primary-400 hover:text-primary-600 transition-colors flex items-center justify-center gap-0.5" data-rating="4.8">4.8★</button>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- CONTENT SECTION -->
+        <section class="flex-1 flex flex-col gap-6">
+            
+            <!-- SEARCH BAR, SORTING, CONTROLS -->
+            <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-soft flex flex-col gap-4">
+                
+                <!-- SEARCH INPUT CONTAINER -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-1">
+                        <input type="text" id="search-input" placeholder="Search product title, brand, category, tags, or details..." class="w-full pl-11 pr-10 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all font-medium placeholder-slate-400 shadow-sm text-sm sm:text-base">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-4 text-slate-400 text-base"></i>
+                        <button id="search-clear" class="absolute right-3 top-3 h-8 w-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-200/50 scale-0 transition-transform">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- SORT DROPDOWN -->
+                    <div class="sm:w-56">
+                        <div class="relative h-full">
+                            <select id="sort-select" class="w-full h-full bg-slate-50 border border-slate-200 rounded-xl py-3.5 pl-4 pr-10 appearance-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 font-semibold text-slate-700 cursor-pointer shadow-sm text-sm">
+                                <option value="featured">Featured / Default</option>
+                                <option value="price-asc">Price: Low to High</option>
+                                <option value="price-desc">Price: High to Low</option>
+                                <option value="rating-desc">Highest Rated</option>
+                                <option value="reviews-desc">Most Reviewed</option>
+                                <option value="released-desc">Newest Arrivals</option>
+                            </select>
+                            <i class="fa-solid fa-angle-down absolute right-4 top-4.5 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KEYWORD TOKENS BAR -->
+                <div id="search-tokens-container" class="flex flex-wrap gap-2 items-center hidden">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">Active Terms:</span>
+                    <!-- Dynamic search tokens will be generated here -->
+                </div>
+
+                <!-- ACTIVE SEARCH AND VIEW RESULTS BANNER -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100">
+                    <div class="text-sm text-slate-500">
+                        <span id="results-count" class="font-bold text-slate-800">0</span> matching products out of <span id="total-count" class="font-semibold text-slate-600">4,000</span>
+                    </div>
+
+                    <!-- ITEMS PER PAGE -->
+                    <div class="flex items-center gap-2 text-sm text-slate-500">
+                        <span>Show:</span>
+                        <div class="flex bg-slate-100 rounded-lg p-0.5 border border-slate-200">
+                            <button class="items-per-page-btn px-2 py-1 rounded-md text-xs font-bold text-slate-600 transition-all hover:bg-white" data-value="12">12</button>
+                            <button class="items-per-page-btn px-2 py-1 rounded-md text-xs font-bold text-slate-600 transition-all hover:bg-white" data-value="24">24</button>
+                            <button class="items-per-page-btn px-2 py-1 rounded-md text-xs font-bold text-slate-600 transition-all hover:bg-white" data-value="48">48</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRODUCT CONTAINER / CARDS GRID -->
+            <div>
+                <!-- Error or Empty Search State -->
+                <div id="empty-state" class="hidden flex flex-col items-center justify-center py-20 px-4 text-center bg-white border border-slate-200 rounded-2xl shadow-soft">
+                    <div class="h-16 w-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center text-2xl shadow-inner mb-4">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-1">No products match your search</h3>
+                    <p class="text-slate-500 text-sm max-w-md">Try adjusting your keywords, broadening your price range, or selecting different category and brand filters.</p>
+                    <button onclick="resetAllFilters()" class="mt-5 inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-primary-600 hover:bg-primary-700 rounded-xl shadow-md transition-colors">
+                        <i class="fa-solid fa-arrow-rotate-left"></i> Reset All Filters
+                    </button>
+                </div>
+
+                <!-- Products Grid -->
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <!-- Cards loaded dynamically via JavaScript -->
+                    <!-- SKELETON LOADERS -->
+                    <div class="bg-white rounded-2xl border border-slate-100 p-4 space-y-4 shadow-sm animate-pulse">
+                        <div class="w-full aspect-[4/3] bg-slate-200 rounded-xl"></div>
+                        <div class="space-y-2">
+                            <div class="h-4 bg-slate-200 rounded w-1/3"></div>
+                            <div class="h-5 bg-slate-200 rounded w-5/6"></div>
+                            <div class="h-4 bg-slate-200 rounded w-1/4"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-slate-100 p-4 space-y-4 shadow-sm animate-pulse">
+                        <div class="w-full aspect-[4/3] bg-slate-200 rounded-xl"></div>
+                        <div class="space-y-2">
+                            <div class="h-4 bg-slate-200 rounded w-1/3"></div>
+                            <div class="h-5 bg-slate-200 rounded w-5/6"></div>
+                            <div class="h-4 bg-slate-200 rounded w-1/4"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl border border-slate-100 p-4 space-y-4 shadow-sm animate-pulse">
+                        <div class="w-full aspect-[4/3] bg-slate-200 rounded-xl"></div>
+                        <div class="space-y-2">
+                            <div class="h-4 bg-slate-200 rounded w-1/3"></div>
+                            <div class="h-5 bg-slate-200 rounded w-5/6"></div>
+                            <div class="h-4 bg-slate-200 rounded w-1/4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGINATION CONTROLS -->
+            <div id="pagination-wrapper" class="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 border-t border-slate-200">
+                <div class="text-sm text-slate-500" id="pagination-showing">
+                    Showing <span class="font-semibold text-slate-800">1</span> to <span class="font-semibold text-slate-800">12</span> of <span class="font-semibold text-slate-800">4,000</span> items
+                </div>
+                <nav id="pagination-nav" class="flex justify-center items-center gap-1.5" aria-label="Pagination">
+                    <!-- Dynamic page buttons -->
+                </nav>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-6 border-b border-slate-800 pb-8">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-xl bg-primary-600 flex items-center justify-center text-white text-lg">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <span class="text-xl font-bold text-white">StellarCart</span>
+                </div>
+                <div class="flex gap-6 text-sm">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Contact Support</a>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 text-xs">
+                <p>&copy; 2026 StellarCart Inc. All rights reserved. Created for founding engineer evaluation.</p>
+                <p class="flex items-center gap-1">Designed with <i class="fa-solid fa-heart text-red-500"></i> using Tailwind CSS and JavaScript</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PRODUCT QUICK VIEW MODAL -->
+    <div id="quickview-modal" class="fixed inset-0 z-50 overflow-y-auto hidden" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeQuickView()"></div>
+        
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-3xl border border-slate-100 flex flex-col md:flex-row">
+                
+                <!-- Close Button -->
+                <button onclick="closeQuickView()" class="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-md shadow-md text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-all border border-slate-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+                
+                <!-- Product Image Column -->
+                <div class="w-full md:w-1/2 bg-slate-50 flex items-center justify-center p-6 relative min-h-[300px]">
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/5 pointer-events-none"></div>
+                    <img id="modal-image" src="" alt="Product image" class="max-h-80 max-w-full object-contain rounded-2xl drop-shadow-lg transition-transform hover:scale-105 duration-300">
+                </div>
+                
+                <!-- Product Details Column -->
+                <div class="w-full md:w-1/2 p-8 flex flex-col justify-between">
+                    <div>
+                        <!-- Category Breadcrumbs & Released Date -->
+                        <div class="flex justify-between items-center mb-3">
+                            <span id="modal-category" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-50 text-primary-700 uppercase tracking-wide">Category</span>
+                            <span id="modal-released" class="text-[11px] text-slate-400 font-medium">Released At</span>
+                        </div>
+                        
+                        <!-- Title & Brand -->
+                        <h2 id="modal-title" class="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight mb-1">Product Title</h2>
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Brand</span>
+                            <span id="modal-brand" class="text-sm text-primary-600 font-bold hover:underline cursor-pointer">Brand Name</span>
+                        </div>
+
+                        <!-- Rating Stars -->
+                        <div class="flex items-center gap-2.5 mb-4 pb-4 border-b border-slate-100">
+                            <div class="flex text-amber-400" id="modal-rating-stars">
+                                <!-- Star Icons loaded dynamically -->
+                            </div>
+                            <span id="modal-rating" class="text-sm font-extrabold text-slate-900">4.5</span>
+                            <span class="text-slate-300">|</span>
+                            <span id="modal-reviews" class="text-xs text-slate-500 font-medium hover:underline cursor-pointer">128 reviews</span>
+                        </div>
+
+                        <!-- Description -->
+                        <p id="modal-description" class="text-sm text-slate-600 leading-relaxed mb-6">Full product description details go here. They can be descriptive and provide comprehensive selling points.</p>
+                        
+                        <!-- Tags List -->
+                        <div class="mb-6">
+                            <span class="block text-[11px] text-slate-400 font-extrabold uppercase tracking-wider mb-2">Features & Tags</span>
+                            <div id="modal-tags" class="flex flex-wrap gap-1.5">
+                                <!-- Tags loaded dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price, Stock and Actions -->
+                    <div class="space-y-4">
+                        <div class="flex items-end justify-between">
+                            <div>
+                                <span class="block text-xs text-slate-400 font-bold uppercase tracking-wider mb-0.5">Special Price</span>
+                                <span id="modal-price" class="text-3xl font-black text-slate-900">$299.99</span>
+                            </div>
+                            <!-- Stock Badge -->
+                            <div id="modal-stock-badge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm">
+                                <i class="fa-solid fa-circle text-[8px]"></i>
+                                <span id="modal-stock-text">In Stock</span>
+                            </div>
+                        </div>
+
+                        <!-- CTA Actions -->
+                        <div class="grid grid-cols-6 gap-3">
+                            <button onclick="showToast('Added to cart demo!')" class="col-span-4 bg-primary-600 hover:bg-primary-700 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
+                                <i class="fa-solid fa-bag-shopping"></i> Add to Cart
+                            </button>
+                            <button id="modal-favorite-btn" class="col-span-1 border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-xl flex items-center justify-center transition-all active:scale-[0.98]">
+                                <i class="fa-solid fa-heart text-lg"></i>
+                            </button>
+                            <a id="modal-details-link" href="#" target="_blank" class="col-span-1 border border-slate-200 hover:border-primary-200 hover:bg-primary-50 text-slate-400 hover:text-primary-600 rounded-xl flex items-center justify-center transition-all active:scale-[0.98]" title="Open dedicated page">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- MAIN JAVASCRIPT APPLICATION -->
+    <script src="index.js"></script>
+</body>
+</html>

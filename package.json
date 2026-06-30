@@ -1,0 +1,14 @@
+{
+  "name": "stellarcart",
+  "version": "1.0.0",
+  "description": "Modern high-performance e-commerce product discovery page styled with Tailwind CLI.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 3000",
+    "build": "tailwindcss -i ./input.css -o ./dist/output.css --minify",
+    "watch": "tailwindcss -i ./input.css -o ./dist/output.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
