@@ -38,6 +38,11 @@
                         <i class="fa-solid fa-heart text-xl"></i>
                         <span id="favorites-count" class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white scale-0 transition-transform">0</span>
                     </button>
+                    <!-- Quick Cart Demo -->
+                    <button id="carts-btn" class="relative p-2 text-slate-400 hover:text-primary-600 hover:bg-slate-50 rounded-lg transition-colors" onclick="showToast('Feature coming soon in Next Edition!')">
+                        <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        <span id="carts-count" class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white scale-0 transition-transform">0</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -169,9 +174,9 @@
 
                 <!-- CTA Action Button Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-100 mt-auto">
-                    <button onclick="showToast('Item successfully added to cart!')" class="sm:col-span-3 bg-primary-600 hover:bg-primary-700 text-white font-extrabold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all active:translate-y-0 active:scale-[0.98]">
-                        <i class="fa-solid fa-bag-shopping text-base"></i> Add to Purchase Bag
-                    </button>
+                   <button id="p-add-to-cart-btn" class="sm:col-span-3 bg-primary-600 hover:bg-primary-700 text-white font-extrabold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all active:translate-y-0 active:scale-[0.98]">
+                       <i class="fa-solid fa-bag-shopping text-base"></i> Add to Purchase Bag
+                   </button>
                     <button onclick="copyProductLink()" class="sm:col-span-1 border border-slate-200 hover:border-primary-200 hover:bg-primary-50 text-slate-500 hover:text-primary-600 font-bold py-4 px-4 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]" title="Copy Product Link">
                         <i class="fa-solid fa-share-nodes text-lg"></i> <span class="sm:hidden font-bold">Share Product</span>
                     </button>

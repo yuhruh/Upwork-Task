@@ -2,6 +2,7 @@
 let allProducts = [];
 let filteredProducts = [];
 let favorites = new Set();
+let carts = new Set();
 
 // Active Filter States
 let searchTokens = [];
@@ -18,15 +19,7 @@ let itemsPerPage = 12;
 let catalogMinPrice = 0;
 let catalogMaxPrice = 2500;
 
-// FAVORITES MANAGED VIA LOCAL STORAGE
-if (localStorage.getItem('stellarcart_favorites')) {
-    try {
-        favorites = new Set(JSON.parse(localStorage.getItem('stellarcart_favorites')));
-        updateFavoritesUI();
-    } catch(e) {
-        console.error("Error parsing favorites", e);
-    }
-}
+// FAVORITES & CARTS INITIALIZED SAFELY ON DOMCONTENTLOADED
 
 // DOM ELEMENTS REFERENCE
 const searchInput = document.getElementById('search-input');
@@ -57,6 +50,26 @@ const resetFiltersBtn = document.getElementById('reset-filters');
 
 // INITIAL APPLICATION LOAD
 document.addEventListener('DOMContentLoaded', async () => {
+    // Load favorites safely after DOM is ready
+    if (localStorage.getItem('stellarcart_favorites')) {
+        try {
+            favorites = new Set(JSON.parse(localStorage.getItem('stellarcart_favorites')));
+            updateFavoritesUI();
+        } catch(e) {
+            console.error("Error parsing favorites", e);
+        }
+    }
+
+    // Load carts safely after DOM is ready
+    if (localStorage.getItem('stellarcart_carts')) {
+        try {
+            carts = new Set(JSON.parse(localStorage.getItem('stellarcart_carts')));
+            updateCartsUI();
+        } catch(e) {
+            console.error("Error parsing carts", e);
+        }
+    }
+    
     setupEventListeners();
     await fetchProducts();
 });
@@ -533,7 +546,7 @@ function renderProductsGrid() {
                     <!-- Bottom quick CTAs -->
                     <div class="flex items-center gap-2">
                         ${product.inStock ? `
-                            <button onclick="showToast('Item added to cart!')" class="h-9 w-9 bg-primary-50 hover:bg-primary-600 text-primary-600 hover:text-white rounded-lg flex items-center justify-center shadow-sm transition-all active:scale-95" title="Quick Add to Cart">
+                            <button onclick="addToCart(${product.id})" class="h-9 w-9 bg-primary-50 hover:bg-primary-600 text-primary-600 hover:text-white rounded-lg flex items-center justify-center shadow-sm transition-all active:scale-95" title="Quick Add to Cart">
                                 <i class="fa-solid fa-bag-shopping text-sm"></i>
                             </button>
                         ` : `
@@ -681,6 +694,33 @@ function updateFavoritesUI() {
     }
 }
 
+function updateCartsUI() {
+    const countBadge = document.getElementById('carts-count');
+    const cartBtn = document.getElementById('carts-btn');
+    
+    if (!countBadge || !cartBtn) return;
+    
+    countBadge.textContent = carts.size;
+    if (carts.size > 0) {
+        countBadge.classList.remove('scale-0');
+        countBadge.classList.add('scale-100');
+        cartBtn.classList.remove('text-slate-400');
+        cartBtn.classList.add('text-red-500');
+    } else {
+        countBadge.classList.remove('scale-100');
+        countBadge.classList.add('scale-0');
+        cartBtn.classList.remove('text-red-500');
+        cartBtn.classList.add('text-slate-400');
+    }
+}
+
+function addToCart(id) {
+    carts.add(id);
+    localStorage.setItem('stellarcart_carts', JSON.stringify(Array.from(carts)));
+    updateCartsUI();
+    showToast("Added to cart!", "bag-shopping");
+}
+
 // 8. QUICK VIEW MODAL CONTROLS
 function openQuickView(id) {
     const product = allProducts.find(p => p.id === id);
@@ -725,6 +765,20 @@ function openQuickView(id) {
     modalFavBtn.dataset.productId = id;
     updateModalFavoriteState(id);
     modalFavBtn.onclick = (e) => toggleFavorite(id, e);
+
+    // Cart btn binding
+    const modalCartBtn = document.getElementById('modal-add-to-cart-btn');
+    if (modalCartBtn) {
+        if (product.inStock) {
+            modalCartBtn.disabled = false;
+            modalCartBtn.className = 'col-span-4 bg-primary-600 hover:bg-primary-700 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-[0.98]';
+            modalCartBtn.onclick = () => addToCart(id);
+        } else {
+            modalCartBtn.disabled = true;
+            modalCartBtn.className = 'col-span-4 bg-slate-100 text-slate-400 font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 border border-slate-200 cursor-not-allowed';
+            modalCartBtn.onclick = null;
+        }
+    }
 
     // Open modal
     document.getElementById('quickview-modal').classList.remove('hidden');

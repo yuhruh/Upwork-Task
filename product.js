@@ -1,24 +1,34 @@
 // APP STATE
 let allProducts = [];
 let favorites = new Set();
+let carts = new Set();
 let productId = null;
 let currentProduct = null;
-
-// FAVORITES SYNC VIA LOCAL STORAGE
-if (localStorage.getItem('stellarcart_favorites')) {
-    try {
-        favorites = new Set(JSON.parse(localStorage.getItem('stellarcart_favorites')));
-        updateFavoritesUI();
-    } catch(e) {
-        console.error("Error loading favorites", e);
-    }
-}
 
 // Parse Product ID from URL parameters
 const urlParams = new URLSearchParams(window.location.search);
 productId = parseInt(urlParams.get('id'));
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Load favorites safely after DOM is ready
+    if (localStorage.getItem('stellarcart_favorites')) {
+        try {
+            favorites = new Set(JSON.parse(localStorage.getItem('stellarcart_favorites')));
+            updateFavoritesUI();
+        } catch(e) {
+            console.error("Error loading favorites", e);
+        }
+    }
+
+    // Load carts safely after DOM is ready
+    if (localStorage.getItem('stellarcart_carts')) {
+        try {
+            carts = new Set(JSON.parse(localStorage.getItem('stellarcart_carts')));
+            updateCartsUI();
+        } catch(e) {
+            console.error("Error loading carts", e);
+        }
+    }
     await fetchProducts();
 });
 
@@ -100,6 +110,9 @@ function renderDetailsPage() {
 
     // Sync favorite button state
     setupFavoriteButton();
+
+    // Sync cart button state
+    setupCartButton();
 
     // Populate Related Products recommendation engine
     renderRelatedProducts();
@@ -204,6 +217,22 @@ function setupFavoriteButton() {
     });
 }
 
+// 4b. CART MECHANICS SYNC
+function setupCartButton() {
+    const cartBtn = document.getElementById('p-add-to-cart-btn');
+    if (!cartBtn) return;
+
+    if (currentProduct.inStock) {
+        cartBtn.disabled = false;
+        cartBtn.className = 'sm:col-span-3 bg-primary-600 hover:bg-primary-700 text-white font-extrabold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all active:translate-y-0 active:scale-[0.98]';
+        cartBtn.onclick = () => addToCart(productId);
+    } else {
+        cartBtn.disabled = true;
+        cartBtn.className = 'sm:col-span-3 bg-slate-100 text-slate-400 font-extrabold py-4 px-6 rounded-2xl flex items-center justify-center gap-2 border border-slate-200 cursor-not-allowed';
+        cartBtn.onclick = null;
+    }
+}
+
 function updateFavoriteButtonUI() {
     const icon = document.getElementById('p-fav-icon');
     const btn = document.getElementById('p-fav-btn');
@@ -222,14 +251,47 @@ function updateFavoritesUI() {
     const countBadge = document.getElementById('favorites-count');
     const favBtn = document.getElementById('favorites-btn');
     
+    if (!countBadge || !favBtn) return;
+    
     countBadge.textContent = favorites.size;
     if (favorites.size > 0) {
-        countBadge.classList.replace('scale-0', 'scale-100');
-        favBtn.classList.replace('text-slate-400', 'text-red-500');
+        countBadge.classList.remove('scale-0');
+        countBadge.classList.add('scale-100');
+        favBtn.classList.remove('text-slate-400');
+        favBtn.classList.add('text-red-500');
     } else {
-        countBadge.classList.replace('scale-100', 'scale-0');
-        favBtn.classList.replace('text-red-500', 'text-slate-400');
+        countBadge.classList.remove('scale-100');
+        countBadge.classList.add('scale-0');
+        favBtn.classList.remove('text-red-500');
+        favBtn.classList.add('text-slate-400');
     }
+}
+
+function updateCartsUI() {
+    const countBadge = document.getElementById('carts-count');
+    const cartBtn = document.getElementById('carts-btn');
+    
+    if (!countBadge || !cartBtn) return;
+    
+    countBadge.textContent = carts.size;
+    if (carts.size > 0) {
+        countBadge.classList.remove('scale-0');
+        countBadge.classList.add('scale-100');
+        cartBtn.classList.remove('text-slate-400');
+        cartBtn.classList.add('text-red-500');
+    } else {
+        countBadge.classList.remove('scale-100');
+        countBadge.classList.add('scale-0');
+        cartBtn.classList.remove('text-red-500');
+        cartBtn.classList.add('text-slate-400');
+    }
+}
+
+function addToCart(id) {
+    carts.add(id);
+    localStorage.setItem('stellarcart_carts', JSON.stringify(Array.from(carts)));
+    updateCartsUI();
+    showToast("Added to cart!", "bag-shopping");
 }
 
 // 5. COPY LINK CLIPBOARD

@@ -75,13 +75,14 @@
 
                 <div class="flex items-center gap-4">
                     <!-- Favorites Indicator -->
-                    <button id="favorites-btn" class="relative p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors" title="Favorites">
+                    <button id="favorites-btn" class="relative p-2 text-slate-400 hover:text-red-500 hover:bg-slate-50 rounded-lg transition-colors" title="Favorites" onclick="showToast('Feature coming soon in Next Edition!')">
                         <i class="fa-solid fa-heart text-xl"></i>
                         <span id="favorites-count" class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white scale-0 transition-transform">0</span>
                     </button>
                     <!-- Quick Cart Demo -->
-                    <button class="relative p-2 text-slate-400 hover:text-primary-600 hover:bg-slate-50 rounded-lg transition-colors" onclick="showToast('Feature coming soon in Next Edition!')">
+                    <button id="carts-btn" class="relative p-2 text-slate-400 hover:text-primary-600 hover:bg-slate-50 rounded-lg transition-colors" onclick="showToast('Feature coming soon in Next Edition!')">
                         <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        <span id="carts-count" class="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white scale-0 transition-transform">0</span>
                     </button>
                 </div>
             </div>
@@ -432,7 +433,7 @@
 
                         <!-- CTA Actions -->
                         <div class="grid grid-cols-6 gap-3">
-                            <button onclick="showToast('Added to cart demo!')" class="col-span-4 bg-primary-600 hover:bg-primary-700 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
+                            <button id="modal-add-to-cart-btn" class="col-span-4 bg-primary-600 hover:bg-primary-700 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-[0.98]">
                                 <i class="fa-solid fa-bag-shopping"></i> Add to Cart
                             </button>
                             <button id="modal-favorite-btn" class="col-span-1 border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-400 hover:text-red-500 rounded-xl flex items-center justify-center transition-all active:scale-[0.98]">
